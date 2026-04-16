@@ -1,8 +1,16 @@
-# takumi (匠)
+<p align="center">
+  <img src="assets/logo.svg" width="80" height="80" alt="takumi logo">
+</p>
 
-A toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos from the command line or through AI assistants like Claude Code and Kiro.
+<h1 align="center">takumi (匠)</h1>
 
-Works on macOS, Windows, and Linux.
+<p align="center">
+  A toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos<br>from the command line or through AI assistants like Claude Code and Kiro.
+</p>
+
+<p align="center">
+  macOS &middot; Windows &middot; Linux
+</p>
 
 ## Install
 
