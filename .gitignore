@@ -19,6 +19,7 @@ node_modules/
 *.vtt
 *.m4a
 *.gif
+!assets/takumi-promo.gif
 *_thumb.jpg
 
 # Whisper models cache

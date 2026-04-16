@@ -17,6 +17,10 @@
   <a href="LICENSE"><img src="https://img.shields.io/github/license/kaiyiwong/takumi" alt="license"></a>
 </p>
 
+<p align="center">
+  <img src="assets/takumi-promo.gif" width="720" alt="takumi demo">
+</p>
+
 ## Install
 
 ### macOS
