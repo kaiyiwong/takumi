@@ -2,12 +2,12 @@
 # ── MCP Config: Print MCP server configuration JSON ─────────────────────────
 
 cmd_mcp-config() {
-  local MCP_SERVER
-  MCP_SERVER="$(realpath "${SCRIPT_DIR}/mcp/server.js")"
+  local MCP_CMD
+  MCP_CMD="$(command -v takumi-mcp 2>/dev/null || realpath "${SCRIPT_DIR}/bin/takumi-mcp")"
 
-  if [ ! -f "$MCP_SERVER" ]; then
-    echo "❌ MCP server not found at: ${MCP_SERVER}"
-    echo "   Run 'takumi setup' first."
+  if [ ! -x "$MCP_CMD" ]; then
+    echo "❌ takumi-mcp not found."
+    echo "   Reinstall takumi: brew upgrade takumi / npm install -g takumi-cli"
     return 1
   fi
 
@@ -17,8 +17,7 @@ cmd_mcp-config() {
 {
   "servers": {
     "takumi": {
-      "command": "node",
-      "args": ["${MCP_SERVER}"]
+      "command": "${MCP_CMD}"
     }
   }
 }
@@ -31,8 +30,7 @@ EOF
 {
   "mcpServers": {
     "takumi": {
-      "command": "node",
-      "args": ["${MCP_SERVER}"]
+      "command": "${MCP_CMD}"
     }
   }
 }
@@ -45,8 +43,7 @@ EOF
 {
   "mcpServers": {
     "takumi": {
-      "command": "node",
-      "args": ["${MCP_SERVER}"]
+      "command": "${MCP_CMD}"
     }
   }
 }

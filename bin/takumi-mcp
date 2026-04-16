@@ -1,0 +1,58 @@
+#!/bin/bash
+# Wrapper to start the takumi MCP server.
+# Finds node even when launched outside a login shell (VS Code, Kiro, etc.)
+
+find_node() {
+  # Check PATH first
+  if command -v node &>/dev/null; then
+    command -v node
+    return
+  fi
+
+  # nvm (macOS/Linux)
+  if [ -d "$HOME/.nvm/versions/node" ]; then
+    local latest
+    latest="$(ls -v "$HOME/.nvm/versions/node" | tail -1)"
+    if [ -n "$latest" ] && [ -x "$HOME/.nvm/versions/node/$latest/bin/node" ]; then
+      echo "$HOME/.nvm/versions/node/$latest/bin/node"
+      return
+    fi
+  fi
+
+  # fnm
+  if [ -d "$HOME/.fnm" ]; then
+    local latest
+    latest="$(ls -v "$HOME/.fnm/node-versions" 2>/dev/null | tail -1)"
+    if [ -n "$latest" ] && [ -x "$HOME/.fnm/node-versions/$latest/installation/bin/node" ]; then
+      echo "$HOME/.fnm/node-versions/$latest/installation/bin/node"
+      return
+    fi
+  fi
+
+  # Homebrew
+  if [ -x "/opt/homebrew/bin/node" ]; then
+    echo "/opt/homebrew/bin/node"
+    return
+  fi
+  if [ -x "/usr/local/bin/node" ]; then
+    echo "/usr/local/bin/node"
+    return
+  fi
+
+  # Volta
+  if [ -x "$HOME/.volta/bin/node" ]; then
+    echo "$HOME/.volta/bin/node"
+    return
+  fi
+
+  return 1
+}
+
+NODE="$(find_node)"
+if [ -z "$NODE" ]; then
+  echo "Error: node not found. Install Node.js: https://nodejs.org" >&2
+  exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+exec "$NODE" "$SCRIPT_DIR/mcp/server.js"
