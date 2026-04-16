@@ -11,12 +11,18 @@ const BASH = findBash();
 const TAKUMI = path.resolve(__dirname, "..", "takumi.sh");
 const ENV = { ...process.env, SCRIPT_DIR: path.resolve(__dirname, "..") };
 
+function result(text, isError = false) {
+  return {
+    content: [{ type: "text", text }],
+    isError,
+  };
+}
+
 function run(args) {
   if (!BASH) {
-    return Promise.resolve({
-      text: "Error: bash not found. On Windows, install Git for Windows: https://git-scm.com/download/win",
-      isError: true,
-    });
+    return Promise.resolve(
+      result("Error: bash not found. On Windows, install Git for Windows: https://git-scm.com/download/win", true)
+    );
   }
 
   // Validate that file path args exist before running
@@ -24,10 +30,7 @@ function run(args) {
   if (filePath) {
     const fs = require("fs");
     if (!fs.existsSync(filePath)) {
-      return Promise.resolve({
-        text: `Error: file or folder not found: ${filePath}`,
-        isError: true,
-      });
+      return Promise.resolve(result(`Error: file or folder not found: ${filePath}`, true));
     }
   }
 
@@ -35,11 +38,11 @@ function run(args) {
     execFile(BASH, [TAKUMI, ...args], { timeout: 300_000, env: ENV }, (err, stdout, stderr) => {
       const output = [stdout, stderr].filter(Boolean).join("\n").trim();
       if (err && !output) {
-        resolve({ text: `Error (exit code ${err.code}): ${err.message}`, isError: true });
+        resolve(result(`Error (exit code ${err.code}): ${err.message}`, true));
       } else if (err) {
-        resolve({ text: `Error (exit code ${err.code}):\n${output}`, isError: true });
+        resolve(result(`Error (exit code ${err.code}):\n${output}`, true));
       } else {
-        resolve({ text: output || "Done.", isError: false });
+        resolve(result(output || "Done."));
       }
     });
   });
