@@ -1,150 +1,149 @@
 # takumi (匠)
 
-The craftsman's toolkit for shaping video assets.
+A command-line toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos — one command at a time or in batch across folders.
+
+Works on macOS, Windows, and Linux.
 
 ## Install
 
-### macOS (Homebrew)
+### macOS
 
 ```bash
 brew tap kaiyiwong/tap
 brew install takumi
-```
-
-### Any platform (npm)
-
-Requires [Node.js](https://nodejs.org) and [Git](https://git-scm.com) (Git provides bash on Windows).
-
-```bash
-npm install -g takumi-cli
-```
-
-### Then install dependencies
-
-```bash
 takumi setup
 ```
 
-This installs ffmpeg and whisper. On macOS it uses Homebrew, on Linux it uses your system package manager, and on Windows it uses winget, chocolatey, or scoop.
+`setup` installs ffmpeg and whisper via Homebrew.
 
-### MCP Server (Claude Code, Kiro, etc.)
+### Windows
 
-takumi includes an MCP server so AI clients can use all commands as tools.
+**Prerequisites:**
+
+1. Install [Node.js](https://nodejs.org) (LTS recommended)
+2. Install [Git for Windows](https://git-scm.com/download/win)
+
+Then open PowerShell:
+
+```powershell
+npm install -g takumi-cli
+takumi setup
+```
+
+`setup` installs ffmpeg via winget, chocolatey, or scoop (whichever is available).
+
+### Linux
+
+```bash
+npm install -g takumi-cli
+takumi setup
+```
+
+`setup` installs ffmpeg and whisper via apt, dnf, or pacman.
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `takumi convert <path> [crf] [max_height]` | Convert to FireTV-optimized H.264 MP4 |
+| `takumi trim <video> <start> <end>` | Cut a clip between timestamps |
+| `takumi cc <path> [lang] [model] [format]` | Generate captions using Whisper |
+| `takumi thumb <path> [timestamp]` | Extract a poster image (JPG) |
+| `takumi info <path>` | Show video metadata |
+| `takumi gif <video> <start> <end> [width]` | Create animated GIF from a clip |
+| `takumi strip <path> <audio\|video\|both>` | Extract audio/video as separate tracks |
+| `takumi srt2vtt <path>` | Convert SRT subtitles to VTT |
+| `takumi vtt2srt <path>` | Convert VTT subtitles to SRT |
+
+All commands accept a single file or a folder (processes all videos recursively). Existing outputs are skipped on re-run so it's safe to retry.
+
+### Examples
+
+```bash
+# Convert all videos in a folder for FireTV
+takumi convert ./videos
+
+# Higher quality conversion, max 720p
+takumi convert ./videos 21 720
+
+# Trim a 75-second clip
+takumi trim video.mp4 00:01:30 00:02:45
+
+# Generate Japanese captions with the large model
+takumi cc ./videos ja large
+
+# Thumbnail at a specific frame
+takumi thumb video.mp4 00:00:15
+
+# Create a GIF from a 5-second clip
+takumi gif video.mp4 00:00:05 00:00:10
+
+# Extract audio only
+takumi strip video.mp4 audio
+
+# Check resolution, codec, duration
+takumi info ./videos
+```
+
+## AI Integration (MCP)
+
+takumi includes an MCP server so AI clients like Claude Code and Kiro can use all commands as tools. No syntax to remember — just describe what you want in plain language.
 
 ```bash
 takumi mcp-config
 ```
 
-This prints the JSON config block. Paste it into your MCP settings file:
+This prints the JSON config block. Paste it into your MCP settings:
 
 - **Claude Code:** `~/.claude.json` or project `.mcp.json`
 - **Kiro:** `.kiro/settings/mcp.json`
 
-Then just talk naturally — "convert these for FireTV", "generate Japanese captions for this folder".
-
-## Commands
-
-### Generate Captions
-
-```bash
-takumi cc video.mp4              # auto-detect language
-takumi cc ./videos ja            # Japanese, all videos in folder
-takumi cc ./videos en large vtt  # English, large model, VTT format
-```
-
-Options: `[language]` `[model: tiny|base|small|medium|large]` `[format: srt|vtt]`
-
-### Convert to FireTV MP4
-
-```bash
-takumi convert video.mp4         # single file
-takumi convert ./videos          # batch folder
-takumi convert ./videos 21       # higher quality (CRF 21)
-takumi convert ./videos 23 720   # max 720p
-```
-
-Outputs H.264 High Profile MP4 with mod16 dimensions, AAC audio, faststart flag. Auto-detects 16:9 vs 4:3 aspect ratio.
-
-Options: `[crf: 18-28, default 23]` `[max_height: default 1080]`
-
-### Trim Clip
-
-```bash
-takumi trim video.mp4 00:01:30 00:02:45
-```
-
-Cuts a segment between two timestamps. Uses stream copy (no re-encoding) so it's fast.
-
-### Extract Thumbnail
-
-```bash
-takumi thumb video.mp4           # frame at 00:00:01
-takumi thumb video.mp4 00:00:15  # frame at specific time
-takumi thumb ./videos            # all videos in folder
-```
-
-Extracts a high-quality JPG poster image at the video's native resolution.
-
-Options: `[timestamp: default 00:00:01]`
-
-### Video Info
-
-```bash
-takumi info video.mp4            # single file
-takumi info ./videos             # all videos in folder
-```
-
-Shows duration, resolution, codecs, bitrate, and file size.
-
-### Create GIF
-
-```bash
-takumi gif video.mp4 00:00:05 00:00:10       # 480px wide (default)
-takumi gif video.mp4 00:00:05 00:00:10 320   # 320px wide
-```
-
-Creates an optimized animated GIF from a clip. Uses palette generation for better colors.
-
-Options: `[width: default 480]`
-
-### Strip Audio/Video
-
-```bash
-takumi strip video.mp4 audio     # extract audio only (.m4a)
-takumi strip video.mp4 video     # extract video only, no audio
-takumi strip video.mp4 both      # extract both as separate files
-takumi strip ./videos both       # batch folder
-```
-
-Uses stream copy (no re-encoding).
-
-### Convert SRT to VTT
-
-```bash
-takumi srt2vtt subtitle.srt      # single file
-takumi srt2vtt ./videos          # all SRTs in folder
-```
-
-### Convert VTT to SRT
-
-```bash
-takumi vtt2srt subtitle.vtt      # single file
-takumi vtt2srt ./videos          # all VTTs in folder
-```
-
-## Notes
-
-- All commands support single files or folders (recursive)
-- Existing outputs are skipped on re-run (safe to retry)
-- Converted videos get a `_firetv` suffix
-- Captions are saved next to the source video
-
 ## Update
 
 ```bash
-# Homebrew
+# Homebrew (macOS)
 brew update && brew upgrade takumi
 
-# npm
+# npm (any platform)
 npm update -g takumi-cli
 ```
+
+## Troubleshooting
+
+### Windows: `takumi` is not recognized
+
+The npm global bin directory may not be in your PATH. Run this in PowerShell:
+
+```powershell
+npm prefix -g
+```
+
+If the output (e.g. `C:\Users\<you>\AppData\Roaming\npm`) is not in your PATH, add it:
+
+```powershell
+[Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\Users\$env:USERNAME\AppData\Roaming\npm", "User")
+```
+
+Then close and reopen PowerShell.
+
+### Windows: bash not found
+
+takumi needs bash to run. Git for Windows includes it. Make sure [Git for Windows](https://git-scm.com/download/win) is installed — the default installation options are fine.
+
+### ffmpeg not found after setup
+
+Restart your terminal. If it still doesn't work, check that ffmpeg is installed:
+
+```bash
+ffmpeg -version
+```
+
+On Windows, you can install it manually with:
+
+```powershell
+winget install --id Gyan.FFmpeg -e
+```
+
+## License
+
+MIT
