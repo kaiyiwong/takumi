@@ -89,15 +89,51 @@ takumi info ./videos
 
 takumi includes an MCP server so AI clients like Claude Code and Kiro can use all commands as tools. No syntax to remember, just describe what you want.
 
-```bash
-takumi mcp-config
+Run `takumi mcp-config` to get the config block for your client, or copy from below.
+
+### VS Code
+
+Create or edit `.vscode/mcp.json` in your project:
+
+```json
+{
+  "servers": {
+    "takumi": {
+      "command": "takumi-mcp"
+    }
+  }
+}
 ```
 
-This prints the JSON config block for each client. Paste the relevant one into:
+### Claude Code
 
-- **VS Code:** `.vscode/mcp.json` (uses `"servers"`)
-- **Claude Code:** `~/.claude.json` or project `.mcp.json` (uses `"mcpServers"`)
-- **Kiro:** `.kiro/settings/mcp.json` (uses `"mcpServers"`)
+Add to `~/.claude.json` or create `.mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "takumi": {
+      "command": "takumi-mcp"
+    }
+  }
+}
+```
+
+### Kiro
+
+Create or edit `.kiro/settings/mcp.json` in your project:
+
+```json
+{
+  "mcpServers": {
+    "takumi": {
+      "command": "takumi-mcp"
+    }
+  }
+}
+```
+
+> **Note:** If your editor can't find `takumi-mcp`, use the full path from `takumi mcp-config` instead.
 
 Once configured, just ask in natural language:
 
