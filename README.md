@@ -17,6 +17,10 @@
   <a href="LICENSE"><img src="https://img.shields.io/github/license/kaiyiwong/takumi" alt="license"></a>
 </p>
 
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/7c4aee3e-1bce-465c-9859-ade2ca7f1df4" width="720" autoplay loop muted playsinline></video>
+</p>
+
 ## Install
 
 ### macOS
