@@ -1,0 +1,9 @@
+{
+  "name": "takumi-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for takumi video toolkit",
+  "main": "server.js",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  }
+}

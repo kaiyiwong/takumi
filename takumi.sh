@@ -16,6 +16,7 @@
 #   install   Make takumi available globally
 #   ui        Launch web interface
 #   update    Update to latest version
+#   mcp-config Print MCP server configuration
 #
 # Usage:
 #   ./takumi.sh <command> <file_or_folder> [options...]
@@ -53,6 +54,7 @@ show_help() {
   echo "  install                            Install takumi globally"
   echo "  ui                                 Launch web interface"
   echo "  update                             Update to latest version"
+  echo "  mcp-config                         Print MCP server config"
   echo "  cc <path> [lang] [model] [format]  Generate captions from video"
   echo "  convert <path> [crf] [max_height]  Convert to FireTV H.264 MP4"
   echo "  trim <video> <start> <end>         Cut a clip between timestamps"
@@ -77,7 +79,7 @@ show_help() {
 }
 
 case "$CMD" in
-  setup|cc|convert|srt2vtt|vtt2srt|trim|thumb|info|gif|strip|install|ui|update)
+  setup|cc|convert|srt2vtt|vtt2srt|trim|thumb|info|gif|strip|install|ui|update|mcp-config)
     if [ "${1:-}" = "help" ] || [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
       source "${SCRIPT_DIR}/commands/${CMD}.sh"
       "cmd_${CMD}"
