@@ -93,10 +93,11 @@ takumi includes an MCP server so AI clients like Claude Code and Kiro can use al
 takumi mcp-config
 ```
 
-This prints the JSON config block. Paste it into your MCP settings:
+This prints the JSON config block for each client. Paste the relevant one into:
 
-- **Claude Code:** `~/.claude.json` or project `.mcp.json`
-- **Kiro:** `.kiro/settings/mcp.json`
+- **VS Code:** `.vscode/mcp.json` (uses `"servers"`)
+- **Claude Code:** `~/.claude.json` or project `.mcp.json` (uses `"mcpServers"`)
+- **Kiro:** `.kiro/settings/mcp.json` (uses `"mcpServers"`)
 
 ## Update
 

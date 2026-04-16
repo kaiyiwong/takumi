@@ -11,7 +11,35 @@ cmd_mcp-config() {
     return 1
   fi
 
-  echo "Add this to your MCP settings (Claude Code, Kiro, etc.):"
+  echo "── VS Code (.vscode/mcp.json) ──"
+  echo ""
+  cat <<EOF
+{
+  "servers": {
+    "takumi": {
+      "command": "node",
+      "args": ["${MCP_SERVER}"]
+    }
+  }
+}
+EOF
+
+  echo ""
+  echo "── Claude Code (~/.claude.json or .mcp.json) ──"
+  echo ""
+  cat <<EOF
+{
+  "mcpServers": {
+    "takumi": {
+      "command": "node",
+      "args": ["${MCP_SERVER}"]
+    }
+  }
+}
+EOF
+
+  echo ""
+  echo "── Kiro (.kiro/settings/mcp.json) ──"
   echo ""
   cat <<EOF
 {
