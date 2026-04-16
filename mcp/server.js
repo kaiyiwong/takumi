@@ -74,16 +74,18 @@ async function main() {
 
   server.tool(
     "takumi_convert",
-    "Convert videos to FireTV-optimized H.264 MP4",
+    "Convert videos to optimized MP4. Profiles: 'web' (default, plays everywhere), 'firetv' (FireTV app assets, mod16 dimensions), 'small' (compressed for email/Slack/low bandwidth, 720p), 'hq' (high quality for portfolio/client delivery). Pick the profile that matches the user's intent.",
     {
       path: z.string().describe("Path to video file or folder"),
-      crf: z.number().optional().describe("Quality (lower = better, default 23)"),
-      max_height: z.number().optional().describe("Max height in pixels (default 1080)"),
+      profile: z.enum(["web", "firetv", "small", "hq"]).optional().describe("Conversion profile: 'web' for websites/general use, 'firetv' for FireTV apps, 'small' for email/Slack/sharing, 'hq' for portfolio/client delivery. Default: web"),
+      crf: z.number().optional().describe("Quality override (18-28, lower = better)"),
+      max_height: z.number().optional().describe("Max height override in pixels"),
     },
-    async ({ path: p, crf, max_height }) => {
+    async ({ path: p, profile, crf, max_height }) => {
       const args = ["convert", p];
-      if (crf !== undefined) args.push(String(crf));
-      if (max_height !== undefined) args.push(String(max_height));
+      if (profile) args.push("--profile", profile);
+      if (crf !== undefined) args.push("--crf", String(crf));
+      if (max_height !== undefined) args.push("--max", String(max_height));
       return run(args);
     }
   );

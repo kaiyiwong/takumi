@@ -4,7 +4,7 @@
 # ============================================================================
 # Commands:
 #   cc        Generate closed captions (SRT/VTT) using Whisper
-#   convert   Convert videos to FireTV-optimized H.264 MP4 (mod16)
+#   convert   Convert videos to optimized MP4 (web, firetv, small, hq)
 #   trim      Cut a clip between timestamps
 #   thumb     Extract poster image from video
 #   info      Show video metadata
@@ -27,7 +27,7 @@ set -euo pipefail
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
 VIDEO_EXTENSIONS="mp4|mov|avi|mkv|webm|m4v|flv|wmv|mpg|mpeg|ts"
-CONVERT_SUFFIX="_firetv"
+CONVERT_SUFFIX="_web"
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -56,7 +56,7 @@ show_help() {
   echo "  update                             Update to latest version"
   echo "  mcp-config                         Print MCP server config"
   echo "  cc <path> [lang] [model] [format]  Generate captions from video"
-  echo "  convert <path> [crf] [max_height]  Convert to FireTV H.264 MP4"
+  echo "  convert <path> [--profile <name>]   Convert to optimized MP4"
   echo "  trim <video> <start> <end>         Cut a clip between timestamps"
   echo "  thumb <path> [timestamp]            Extract poster image (JPG)"
   echo "  info <path>                         Show video metadata"
@@ -68,7 +68,7 @@ show_help() {
   echo "Examples:"
   echo "  ./takumi.sh setup"
   echo "  ./takumi.sh cc ./videos ja"
-  echo "  ./takumi.sh convert ./videos 21"
+  echo "  ./takumi.sh convert ./videos --profile firetv"
   echo "  ./takumi.sh trim video.mp4 00:01:30 00:02:45"
   echo "  ./takumi.sh thumb video.mp4 00:00:15"
   echo "  ./takumi.sh info ./videos"

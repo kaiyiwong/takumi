@@ -45,7 +45,7 @@ takumi setup
 
 | Command | Description |
 |---------|-------------|
-| `takumi convert <path> [crf] [max_height]` | Convert to FireTV-optimized H.264 MP4 |
+| `takumi convert <path> [--profile name]` | Convert to optimized MP4 |
 | `takumi trim <video> <start> <end>` | Cut a clip between timestamps |
 | `takumi cc <path> [lang] [model] [format]` | Generate captions using Whisper |
 | `takumi thumb <path> [timestamp]` | Extract a poster image (JPG) |
@@ -60,11 +60,20 @@ All commands accept a single file or a folder (processes all videos recursively)
 ### Examples
 
 ```bash
-# Convert all videos in a folder for FireTV
-takumi convert ./videos
+# Convert for web (default, plays everywhere)
+takumi convert video.mp4
 
-# Higher quality conversion, max 720p
-takumi convert ./videos 21 720
+# Convert for FireTV
+takumi convert ./videos --profile firetv
+
+# Compressed for email or Slack
+takumi convert video.mp4 --profile small
+
+# High quality for portfolio
+takumi convert video.mp4 --profile hq
+
+# Custom: override quality and max height
+takumi convert ./videos --crf 21 --max 720
 
 # Trim a 75-second clip
 takumi trim video.mp4 00:01:30 00:02:45

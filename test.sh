@@ -131,6 +131,38 @@ assert "640x480 capped 240 → 320:240" "320:240" "$OUT"
 OUT=$(get_best_mod16 3840 2160 1080)
 assert "4K capped 1080 → 1920:1080" "1920:1080" "$OUT"
 
+# ── Convert profiles ───────────────────────────────────────────────────────
+
+echo ""
+echo "🔧 Convert profiles"
+
+source commands/convert.sh
+
+apply_profile web
+assert "web profile CRF" "23" "$PROFILE_CRF"
+assert "web profile suffix" "_web" "$PROFILE_SUFFIX"
+assert "web profile mod16 off" "false" "$PROFILE_MOD16"
+
+apply_profile firetv
+assert "firetv profile CRF" "23" "$PROFILE_CRF"
+assert "firetv profile suffix" "_firetv" "$PROFILE_SUFFIX"
+assert "firetv profile mod16 on" "true" "$PROFILE_MOD16"
+
+apply_profile small
+assert "small profile CRF" "28" "$PROFILE_CRF"
+assert "small profile max height" "720" "$PROFILE_MAX_H"
+assert "small profile suffix" "_small" "$PROFILE_SUFFIX"
+
+apply_profile hq
+assert "hq profile CRF" "18" "$PROFILE_CRF"
+assert "hq profile suffix" "_hq" "$PROFILE_SUFFIX"
+
+OUT=$(apply_profile badprofile 2>&1)
+assert "bad profile shows error" "Unknown profile" "$OUT"
+
+OUT=$(run convert video.mp4 --help)
+assert "convert --help shows profiles" "Profiles:" "$OUT"
+
 # ── Paths with spaces ──────────────────────────────────────────────────────
 
 echo ""
