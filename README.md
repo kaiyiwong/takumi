@@ -4,26 +4,28 @@ The craftsman's toolkit for shaping video assets.
 
 ## Install
 
+### macOS (Homebrew)
+
 ```bash
 brew tap kaiyiwong/tap
 brew install takumi
 ```
 
-This installs `takumi` globally. Run `takumi setup` once to install dependencies (ffmpeg, whisper).
+### Any platform (npm)
+
+Requires [Node.js](https://nodejs.org) and [Git](https://git-scm.com) (Git provides bash on Windows).
+
+```bash
+npm install -g takumi-cli
+```
+
+### Then install dependencies
 
 ```bash
 takumi setup
 ```
 
-### Web UI (optional)
-
-If you prefer a visual interface over the terminal:
-
-```bash
-takumi ui
-```
-
-Opens a browser-based UI where you can browse for files, pick commands from a menu, and see real-time output. Requires Node.js.
+This installs ffmpeg and whisper. On macOS it uses Homebrew, on Linux it uses your system package manager, and on Windows it uses winget, chocolatey, or scoop.
 
 ### MCP Server (Claude Code, Kiro, etc.)
 
@@ -39,16 +41,6 @@ This prints the JSON config block. Paste it into your MCP settings file:
 - **Kiro:** `.kiro/settings/mcp.json`
 
 Then just talk naturally — "convert these for FireTV", "generate Japanese captions for this folder".
-
-### Web UI (optional)
-
-If you prefer a visual interface over the terminal:
-
-```bash
-takumi ui
-```
-
-Opens a browser-based UI where you can browse for files, pick commands from a menu, and see real-time output. Requires Node.js (installed with most dev setups).
 
 ## Commands
 
@@ -150,5 +142,9 @@ takumi vtt2srt ./videos          # all VTTs in folder
 ## Update
 
 ```bash
+# Homebrew
 brew update && brew upgrade takumi
+
+# npm
+npm update -g takumi-cli
 ```

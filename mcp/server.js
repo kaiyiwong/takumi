@@ -5,12 +5,21 @@ const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio
 const { z } = require("zod");
 const { execFile } = require("child_process");
 const path = require("path");
+const { findBash } = require("../lib/find-bash");
 
+const BASH = findBash();
 const TAKUMI = path.resolve(__dirname, "..", "takumi.sh");
+const ENV = { ...process.env, SCRIPT_DIR: path.resolve(__dirname, "..") };
 
 function run(args) {
+  if (!BASH) {
+    return Promise.resolve({
+      text: "Error: bash not found. On Windows, install Git for Windows: https://git-scm.com/download/win",
+      isError: true,
+    });
+  }
   return new Promise((resolve) => {
-    execFile("bash", [TAKUMI, ...args], { timeout: 300_000 }, (err, stdout, stderr) => {
+    execFile(BASH, [TAKUMI, ...args], { timeout: 300_000, env: ENV }, (err, stdout, stderr) => {
       const output = [stdout, stderr].filter(Boolean).join("\n").trim();
       if (err && !output) {
         resolve({ text: `Error: ${err.message}`, isError: true });
