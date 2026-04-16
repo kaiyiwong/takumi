@@ -54,5 +54,8 @@ if [ -z "$NODE" ]; then
   exit 1
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+if [ -z "${SCRIPT_DIR:-}" ]; then
+  REAL_PATH="$(realpath "$0" 2>/dev/null || readlink -f "$0" 2>/dev/null || echo "$0")"
+  SCRIPT_DIR="$(cd "$(dirname "$REAL_PATH")/.." && pwd)"
+fi
 exec "$NODE" "$SCRIPT_DIR/mcp/server.js"
