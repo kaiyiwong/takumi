@@ -1,6 +1,6 @@
 # takumi (匠)
 
-A command-line toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos — one command at a time or in batch across folders.
+A toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos from the command line or through AI assistants like Claude Code and Kiro.
 
 Works on macOS, Windows, and Linux.
 
