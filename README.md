@@ -87,7 +87,7 @@ takumi info ./videos
 
 ## AI Integration (MCP)
 
-takumi includes an MCP server so AI clients like Claude Code and Kiro can use all commands as tools. No syntax to remember — just describe what you want in plain language.
+takumi includes an MCP server so AI clients like Claude Code and Kiro can use all commands as tools. No syntax to remember, just describe what you want.
 
 ```bash
 takumi mcp-config
@@ -98,6 +98,15 @@ This prints the JSON config block for each client. Paste the relevant one into:
 - **VS Code:** `.vscode/mcp.json` (uses `"servers"`)
 - **Claude Code:** `~/.claude.json` or project `.mcp.json` (uses `"mcpServers"`)
 - **Kiro:** `.kiro/settings/mcp.json` (uses `"mcpServers"`)
+
+Once configured, just ask in natural language:
+
+- "convert all the videos in ~/projects/campaign for FireTV"
+- "what's the resolution and duration of this video?"
+- "generate Japanese captions for the videos in this folder"
+- "trim the intro, keep only 00:01:30 to 00:04:00"
+- "extract the audio from meeting.mp4"
+- "make a gif from the first 5 seconds of demo.mp4"
 
 ## Update
 
