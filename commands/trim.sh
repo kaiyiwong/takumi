@@ -26,7 +26,7 @@ cmd_trim() {
 
   echo "✂️  Trimming: $(basename "$INPUT") [${START} → ${END}]"
 
-  if ffmpeg -i "$INPUT" -ss "$START" -to "$END" \
+  if ffmpeg -ss "$START" -i "$INPUT" -to "$END" \
     -c copy -avoid_negative_ts make_zero \
     -y -loglevel warning -stats \
     "$OUTPUT" 2>&1; then

@@ -6,6 +6,9 @@
 .vscode/
 .idea/
 
+# Dependencies
+node_modules/
+
 # Archives
 *.zip
 *.tar.gz
@@ -20,3 +23,10 @@
 
 # Whisper models cache
 .whisper/
+
+# UI runtime
+ui/.port
+
+# Local planning docs
+PLAN.md
+TASTE.md

@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>takumi (匠)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f0f0f;
+        --surface: #161616;
+        --surface-2: #1e1e1e;
+        --border: #333333;
+        --text: #f2ede4;
+        --text-muted: #a8a8a0;
+        --accent: #e07030;
+        --accent-dim: #a84e18;
+        --focus-ring: #e07030;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Open Sans', 'Segoe UI', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 48px 24px;
+      }
+
+      /* Header */
+      header {
+        margin-bottom: 48px;
+      }
+      .wordmark {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 36px;
+        font-weight: 400;
+        letter-spacing: 0.18em;
+        color: var(--text);
+        text-transform: uppercase;
+      }
+      .kanji {
+        font-size: 18px;
+        color: var(--accent);
+        letter-spacing: 0.08em;
+        margin-top: 2px;
+      }
+      header p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-top: 8px;
+        letter-spacing: 0.02em;
+      }
+
+      /* Command nav */
+      .commands {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 48px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+      }
+      .cmd-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+        white-space: nowrap;
+      }
+      .cmd-btn:hover {
+        background: var(--surface-2);
+        color: var(--text);
+        border-color: var(--text-muted);
+      }
+      .cmd-btn:focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
+      }
+      .cmd-btn.active {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: transparent;
+      }
+
+      /* Form area */
+      .form-area {
+        margin-bottom: 48px;
+        display: none;
+      }
+      .form-area.visible {
+        display: block;
+      }
+      .form-area h2 {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .form-area .form-desc {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .field input,
+      .field select {
+        width: 100%;
+        padding: 10px 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .field input:focus,
+      .field select:focus {
+        border-color: var(--accent);
+      }
+      .field input:focus-visible,
+      .field select:focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 1px;
+      }
+      .field .hint {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 4px;
+        letter-spacing: 0.06em;
+      }
+
+      .path-row {
+        display: flex;
+        gap: 8px;
+      }
+      .path-row input {
+        flex: 1;
+      }
+      .browse-btn {
+        padding: 10px 14px;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.15s;
+        letter-spacing: 0.04em;
+      }
+      .browse-btn:hover {
+        border-color: var(--accent);
+        color: var(--text);
+      }
+      .browse-btn:focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
+      }
+
+      /* Run button — border only, accent */
+      .run-btn {
+        width: 100%;
+        padding: 12px;
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        margin-top: 16px;
+        transition: all 0.15s;
+      }
+      .run-btn:hover {
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .run-btn:focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
+      }
+      }
+      .run-btn:disabled {
+        border-color: var(--accent-dim);
+        color: var(--accent-dim);
+        cursor: not-allowed;
+        background: transparent;
+        animation: breathe 2s ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* Output — terminal-like */
+      .output {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 16px 20px;
+        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        display: none;
+      }
+      .output.visible {
+        display: block;
+      }
+      .output .line-ok {
+        color: #8fbc6a;
+      }
+      .output .line-err {
+        color: #d45;
+      }
+      .output .line-info {
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="wordmark">Takumi</div>
+        <div class="kanji">匠</div>
+        <p>The craftsman's toolkit for shaping video assets</p>
+      </header>
+
+      <div class="commands" id="commands"></div>
+      <div class="form-area" id="formArea"></div>
+      <div class="output" id="output"></div>
+    </div>
+    <script>
+      const COMMANDS = [
+        {
+          id: 'cc',
+          name: 'Captions',
+          desc: 'Generate subtitles from video audio. Supports multiple languages and output formats.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'language',
+              label: 'Language',
+              type: 'select',
+              options: [
+                ['', 'Auto-detect'],
+                ['ja', 'Japanese'],
+                ['en', 'English'],
+                ['zh', 'Chinese'],
+                ['ko', 'Korean'],
+                ['es', 'Spanish'],
+                ['fr', 'French'],
+                ['de', 'German'],
+              ],
+            },
+            {
+              name: 'model',
+              label: 'Model',
+              type: 'select',
+              options: [
+                ['medium', 'Medium (default)'],
+                ['tiny', 'Tiny (fast)'],
+                ['base', 'Base'],
+                ['small', 'Small'],
+                ['large', 'Large (slow, best)'],
+              ],
+            },
+            {
+              name: 'format',
+              label: 'Format',
+              type: 'select',
+              options: [
+                ['srt', 'SRT (default)'],
+                ['vtt', 'VTT'],
+                ['txt', 'Text'],
+                ['json', 'JSON'],
+              ],
+            },
+          ],
+        },
+        {
+          id: 'convert',
+          name: 'FireTV Convert',
+          desc: 'H.264 High Profile MP4 with mod16 dimensions, AAC audio, faststart flag.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'crf',
+              label: 'Quality (CRF)',
+              type: 'select',
+              options: [
+                ['23', '23 (default)'],
+                ['18', '18 (high)'],
+                ['21', '21'],
+                ['25', '25'],
+                ['28', '28 (low)'],
+              ],
+            },
+            {
+              name: 'max_height',
+              label: 'Max Height',
+              type: 'select',
+              options: [
+                ['1080', '1080p (default)'],
+                ['720', '720p'],
+                ['480', '480p'],
+              ],
+            },
+          ],
+        },
+        {
+          id: 'trim',
+          name: 'Trim',
+          desc: 'Cut a segment between two timestamps. Stream copy, no re-encoding.',
+          fields: [
+            { name: 'path', label: 'Video File', type: 'text', required: true },
+            {
+              name: 'start',
+              label: 'Start',
+              type: 'text',
+              required: true,
+              hint: 'HH:MM:SS',
+            },
+            {
+              name: 'end',
+              label: 'End',
+              type: 'text',
+              required: true,
+              hint: 'HH:MM:SS',
+            },
+          ],
+        },
+        {
+          id: 'thumb',
+          name: 'Thumbnail',
+          desc: 'Extract a high-quality JPG poster frame at native resolution.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'timestamp',
+              label: 'Timestamp',
+              type: 'text',
+              hint: 'HH:MM:SS (default: 00:00:01)',
+            },
+          ],
+        },
+        {
+          id: 'info',
+          name: 'Info',
+          desc: 'Duration, resolution, codecs, bitrate, file size.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        {
+          id: 'gif',
+          name: 'GIF',
+          desc: 'Animated GIF with palette generation for good color quality.',
+          fields: [
+            { name: 'path', label: 'Video File', type: 'text', required: true },
+            {
+              name: 'start',
+              label: 'Start',
+              type: 'text',
+              hint: 'HH:MM:SS',
+              default: '00:00:00',
+            },
+            {
+              name: 'duration',
+              label: 'Duration (seconds)',
+              type: 'text',
+              required: true,
+              hint: 'e.g. 5',
+              default: '5',
+            },
+            {
+              name: 'width',
+              label: 'Width (px)',
+              type: 'text',
+              hint: 'Default: 480',
+            },
+          ],
+        },
+        {
+          id: 'strip',
+          name: 'Strip',
+          desc: 'Separate audio and video into individual files. Stream copy.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'mode',
+              label: 'Mode',
+              type: 'select',
+              options: [
+                ['audio', 'Audio only (.m4a)'],
+                ['video', 'Video only (no audio)'],
+                ['both', 'Both tracks'],
+              ],
+            },
+          ],
+        },
+        {
+          id: 'srt2vtt',
+          name: 'SRT → VTT',
+          desc: 'Convert SRT subtitle files to VTT format.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        {
+          id: 'vtt2srt',
+          name: 'VTT → SRT',
+          desc: 'Convert VTT subtitle files to SRT format.',
+          fields: [
+            {
+              name: 'path',
+              label: 'File or Folder',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+      ];
+
+      let activeCmd = null;
+
+      const cmdGrid = document.getElementById('commands');
+      COMMANDS.forEach((cmd) => {
+        const btn = document.createElement('div');
+        btn.className = 'cmd-btn';
+        btn.dataset.id = cmd.id;
+        btn.textContent = cmd.name;
+        btn.onclick = () => selectCommand(cmd);
+        cmdGrid.appendChild(btn);
+      });
+
+      function selectCommand(cmd) {
+        activeCmd = cmd;
+        document
+          .querySelectorAll('.cmd-btn')
+          .forEach((b) => b.classList.remove('active'));
+        document
+          .querySelector(`.cmd-btn[data-id="${cmd.id}"]`)
+          .classList.add('active');
+
+        const output = document.getElementById('output');
+        output.innerHTML = '';
+        output.classList.remove('visible');
+
+        const form = document.getElementById('formArea');
+        let html = `<h2>${cmd.name}</h2>`;
+        html += `<p class="form-desc">${cmd.desc}</p>`;
+
+        cmd.fields.forEach((f) => {
+          html += `<div class="field"><label>${f.label}</label>`;
+          if (f.type === 'select') {
+            html += `<select id="f_${f.name}">`;
+            f.options.forEach(
+              ([val, label]) =>
+                (html += `<option value="${val}">${label}</option>`),
+            );
+            html += `</select>`;
+          } else if (f.name === 'path') {
+            html += `<div class="path-row">`;
+            html += `<input type="text" id="f_${f.name}" placeholder="Select a file or folder..." ${f.required ? 'required' : ''}>`;
+            html += `<button class="browse-btn" onclick="pickPath('f_${f.name}','file')">File</button>`;
+            html += `<button class="browse-btn" onclick="pickPath('f_${f.name}','folder')">Folder</button>`;
+            html += `</div>`;
+          } else {
+            html += `<input type="text" id="f_${f.name}" placeholder="${f.hint || ''}" value="${f.default || ''}" ${f.required ? 'required' : ''}>`;
+          }
+          if (f.hint && f.type !== 'select' && f.name !== 'path')
+            html += `<div class="hint">${f.hint}</div>`;
+          html += `</div>`;
+        });
+
+        html += `<button class="run-btn" id="runBtn" onclick="runCommand()">Run</button>`;
+        form.innerHTML = html;
+        form.classList.add('visible');
+      }
+
+      async function pickPath(inputId, mode) {
+        const row = event.target.closest('.path-row');
+        const btns = row.querySelectorAll('.browse-btn');
+        btns.forEach((b) => {
+          b.disabled = true;
+          b.style.opacity = '0.4';
+        });
+        try {
+          const resp = await fetch(`/api/pick?mode=${mode}`);
+          const data = await resp.json();
+          if (data.path) {
+            document.getElementById(inputId).value = data.path;
+          }
+        } catch (err) {
+          console.error('Pick failed:', err);
+        }
+        btns.forEach((b) => {
+          b.disabled = false;
+          b.style.opacity = '1';
+        });
+      }
+
+      async function runCommand() {
+        if (!activeCmd) return;
+
+        const args = [];
+        for (const f of activeCmd.fields) {
+          const el = document.getElementById(`f_${f.name}`);
+          const val = el.value.trim();
+          if (f.required && !val) {
+            el.style.borderColor = '#d45';
+            el.focus();
+            return;
+          }
+          if (val) args.push(val);
+        }
+
+        if (activeCmd.id === 'gif') {
+          const pathVal = args[0];
+          const startRaw =
+            document.getElementById('f_start').value.trim() || '00:00:00';
+          const durSec = parseInt(
+            document.getElementById('f_duration').value.trim(),
+            10,
+          );
+          const widthVal = document.getElementById('f_width').value.trim();
+          let startSec = 0;
+          const parts = startRaw.split(':').map(Number);
+          if (parts.length === 3)
+            startSec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+          else if (parts.length === 2) startSec = parts[0] * 60 + parts[1];
+          else startSec = parts[0] || 0;
+          const endSec = startSec + durSec;
+          const fmt = (s) => {
+            const h = String(Math.floor(s / 3600)).padStart(2, '0');
+            const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+            const ss = String(s % 60).padStart(2, '0');
+            return `${h}:${m}:${ss}`;
+          };
+          args.length = 0;
+          args.push(pathVal, fmt(startSec), fmt(endSec));
+          if (widthVal) args.push(widthVal);
+        }
+
+        const output = document.getElementById('output');
+        const runBtn = document.getElementById('runBtn');
+        output.innerHTML = '';
+        output.classList.add('visible');
+        runBtn.disabled = true;
+        runBtn.textContent = 'Running...';
+
+        try {
+          const startResp = await fetch('/api/run', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command: activeCmd.id, args }),
+          });
+          const { id } = await startResp.json();
+          let offset = 0;
+
+          while (true) {
+            await new Promise((r) => setTimeout(r, 500));
+            const pollResp = await fetch(`/api/poll/${id}?offset=${offset}`);
+            const data = await pollResp.json();
+            if (data.output) {
+              appendOutput(output, data.output);
+              offset = data.offset;
+            }
+            if (data.done) {
+              const s = document.createElement('span');
+              s.className = data.code === 0 ? 'line-ok' : 'line-err';
+              s.textContent =
+                data.code === 0
+                  ? '\n✅ Complete\n'
+                  : '\n❌ Finished with errors\n';
+              output.appendChild(s);
+              output.scrollTop = output.scrollHeight;
+              break;
+            }
+          }
+        } catch (err) {
+          output.innerHTML = `<span class="line-err">Error: ${err.message}</span>`;
+        }
+        runBtn.disabled = false;
+        runBtn.textContent = 'Run';
+      }
+
+      function appendOutput(el, text) {
+        const lines = text.split('\n');
+        for (const line of lines) {
+          if (!line && lines.length === 1) continue;
+          const span = document.createElement('span');
+          if (line.includes('✅')) span.className = 'line-ok';
+          else if (line.includes('❌')) span.className = 'line-err';
+          else span.className = 'line-info';
+          span.textContent = line + '\n';
+          el.appendChild(span);
+        }
+        el.scrollTop = el.scrollHeight;
+      }
+
+      selectCommand(COMMANDS[0]);
+    </script>
+  </body>
+</html>

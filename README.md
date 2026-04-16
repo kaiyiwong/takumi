@@ -2,8 +2,6 @@
 
 The craftsman's toolkit for shaping video assets.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
 ## Setup
 
 ```bash
@@ -11,6 +9,34 @@ The craftsman's toolkit for shaping video assets.
 ```
 
 Installs ffmpeg, pipx, and whisper via Homebrew. Restart your terminal after.
+
+### Install globally (optional)
+
+```bash
+./takumi.sh install
+```
+
+This lets you run `takumi` from anywhere instead of `./takumi.sh` from the folder. It creates a symlink in `/usr/local/bin`. May ask for your password (sudo).
+
+After installing globally:
+
+```bash
+takumi cc ./videos ja
+takumi convert ./videos
+takumi info ./videos
+```
+
+If you skip this step, everything still works — just run commands from the takumi folder with `./takumi.sh`.
+
+### Web UI (optional)
+
+If you prefer a visual interface over the terminal:
+
+```bash
+takumi ui
+```
+
+Opens a browser-based UI where you can browse for files, pick commands from a menu, and see real-time output. Requires Node.js (installed with most dev setups).
 
 ## Commands
 
@@ -108,3 +134,16 @@ Uses stream copy (no re-encoding).
 - Existing outputs are skipped on re-run (safe to retry)
 - Converted videos get a `_firetv` suffix
 - Captions are saved next to the source video
+
+## Kiro Integration (optional)
+
+If you use Kiro, you can add takumi as a steering file so you can ask Kiro to run commands in plain language instead of remembering the syntax.
+
+1. Copy `takumi.md` from this package to your workspace's `.kiro/steering/` folder:
+   ```
+   mkdir -p .kiro/steering
+   cp takumi.md .kiro/steering/
+   ```
+2. Restart Kiro
+3. In chat, type `#` and select `takumi.md` from the list
+4. Then just ask in plain language, e.g. "convert my videos for FireTV" or "generate Japanese captions for this folder"
