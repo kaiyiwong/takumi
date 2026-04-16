@@ -12,6 +12,11 @@
   macOS &middot; Windows &middot; Linux
 </p>
 
+<p align="center">
+  <a href="https://github.com/kaiyiwong/takumi/releases/latest"><img src="https://img.shields.io/github/v/release/kaiyiwong/takumi" alt="release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/kaiyiwong/takumi" alt="license"></a>
+</p>
+
 ## Install
 
 ### macOS
