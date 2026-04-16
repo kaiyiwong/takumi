@@ -74,10 +74,10 @@ async function main() {
 
   server.tool(
     "takumi_convert",
-    "Convert videos to optimized MP4. Profiles: 'web' (default, plays everywhere), 'firetv' (FireTV app assets, mod16 dimensions), 'small' (compressed for email/Slack/low bandwidth, 720p), 'hq' (high quality for portfolio/client delivery). Pick the profile that matches the user's intent.",
+    "Convert videos to optimized MP4. Choose a profile based on the user's intent:\n- 'web' (default): website, CMS, landing page, blog, general use, online publishing, embedding in a webpage\n- 'firetv': FireTV app, Amazon Fire tablet, streaming device, TV app assets, broadcast, set-top box\n- 'small': email attachment, Slack, Teams, Discord, SMS, quick preview, social sharing, file size matters, low bandwidth, mobile messaging\n- 'hq': portfolio, client deliverable, showreel, demo reel, presentation, archival, best possible quality",
     {
       path: z.string().describe("Path to video file or folder"),
-      profile: z.enum(["web", "firetv", "small", "hq"]).optional().describe("Conversion profile: 'web' for websites/general use, 'firetv' for FireTV apps, 'small' for email/Slack/sharing, 'hq' for portfolio/client delivery. Default: web"),
+      profile: z.enum(["web", "firetv", "small", "hq"]).optional().describe("Conversion profile. 'web': website/CMS/general use/embedding. 'firetv': FireTV/streaming device/TV app. 'small': email/Slack/Teams/Discord/messaging/quick share/preview/low bandwidth. 'hq': portfolio/client delivery/showreel/presentation/archival. Default: web"),
       crf: z.number().optional().describe("Quality override (18-28, lower = better)"),
       max_height: z.number().optional().describe("Max height override in pixels"),
     },
