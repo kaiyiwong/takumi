@@ -1,6 +1,6 @@
 {
   "name": "takumi-cli",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "The craftsman's toolkit for shaping video assets",
   "bin": {
     "takumi": "bin/takumi.js"
