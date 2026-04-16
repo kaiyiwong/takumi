@@ -131,6 +131,45 @@ assert "640x480 capped 240 → 320:240" "320:240" "$OUT"
 OUT=$(get_best_mod16 3840 2160 1080)
 assert "4K capped 1080 → 1920:1080" "1920:1080" "$OUT"
 
+# ── Paths with spaces ──────────────────────────────────────────────────────
+
+echo ""
+echo "🔧 Paths with spaces"
+
+TMP_DIR=$(mktemp -d)
+SPACE_DIR="${TMP_DIR}/folder with spaces"
+mkdir -p "$SPACE_DIR"
+
+OUT=$(run info "$SPACE_DIR/nonexistent file.mp4")
+assert "info handles spaces in path" "not found" "$OUT"
+
+OUT=$(run convert "$SPACE_DIR/nonexistent file.mp4")
+assert "convert handles spaces in path" "not found" "$OUT"
+
+OUT=$(run trim "$SPACE_DIR/nonexistent file.mp4" 00:00:00 00:00:05)
+assert "trim handles spaces in path" "not found" "$OUT"
+
+OUT=$(run thumb "$SPACE_DIR/nonexistent file.mp4")
+assert "thumb handles spaces in path" "not found" "$OUT"
+
+OUT=$(run gif "$SPACE_DIR/nonexistent file.mp4" 00:00:00 00:00:05)
+assert "gif handles spaces in path" "not found" "$OUT"
+
+OUT=$(run strip "$SPACE_DIR/nonexistent file.mp4" audio)
+assert "strip handles spaces in path" "not found" "$OUT"
+
+rm -rf "$TMP_DIR"
+
+# ── MCP server ──────────────────────────────────────────────────────────────
+
+echo ""
+echo "🔧 MCP server"
+
+MCP_INIT='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}}}'
+OUT=$(echo "$MCP_INIT" | node mcp/server.js 2>/dev/null || true)
+assert "MCP server initializes" "takumi" "$OUT"
+assert "MCP server reports tools capability" "tools" "$OUT"
+
 # ── All commands listed in help ──────────────────────────────────────────────
 
 echo ""
@@ -141,6 +180,7 @@ for CMD in "${COMMANDS[@]}"; do
   assert "$CMD listed in help" "$CMD" "$HELP"
 done
 assert "setup listed in help" "setup" "$HELP"
+assert "mcp-config listed in help" "mcp-config" "$HELP"
 
 # ── Results ──────────────────────────────────────────────────────────────────
 

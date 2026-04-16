@@ -18,13 +18,26 @@ function run(args) {
       isError: true,
     });
   }
+
+  // Validate that file path args exist before running
+  const filePath = args[1];
+  if (filePath) {
+    const fs = require("fs");
+    if (!fs.existsSync(filePath)) {
+      return Promise.resolve({
+        text: `Error: file or folder not found: ${filePath}`,
+        isError: true,
+      });
+    }
+  }
+
   return new Promise((resolve) => {
     execFile(BASH, [TAKUMI, ...args], { timeout: 300_000, env: ENV }, (err, stdout, stderr) => {
       const output = [stdout, stderr].filter(Boolean).join("\n").trim();
       if (err && !output) {
-        resolve({ text: `Error: ${err.message}`, isError: true });
+        resolve({ text: `Error (exit code ${err.code}): ${err.message}`, isError: true });
       } else if (err) {
-        resolve({ text: output, isError: true });
+        resolve({ text: `Error (exit code ${err.code}):\n${output}`, isError: true });
       } else {
         resolve({ text: output || "Done.", isError: false });
       }
