@@ -130,16 +130,18 @@ async function main() {
 
   server.tool(
     "takumi_gif",
-    "Create an animated GIF from a video clip",
+    "Create an animated GIF from a video clip. Choose a profile based on the user's intent:\n- 'default' (default): general purpose, quick preview, simple animation\n- 'slack': Slack, Teams, Discord, chat apps, messaging, small file, low bandwidth\n- 'readme': GitHub README, documentation, project page, wiki, tutorial\n- 'hq': portfolio, Dribbble, presentation, showreel, demo, client deliverable, smooth animation",
     {
       path: z.string().describe("Path to video file"),
       start: z.string().describe("Start timestamp"),
       end: z.string().describe("End timestamp"),
-      width: z.number().optional().describe("GIF width in pixels (default 480)"),
+      profile: z.enum(["default", "slack", "readme", "hq"]).optional().describe("GIF profile. 'default': general purpose 480px 15fps. 'slack': chat apps 360px 10fps small file. 'readme': GitHub/docs 720px 15fps. 'hq': portfolio/Dribbble 800px 24fps smooth. Default: default"),
+      width: z.number().optional().describe("Width override in pixels"),
     },
-    async ({ path: p, start, end, width }) => {
+    async ({ path: p, start, end, profile, width }) => {
       const args = ["gif", p, start, end];
-      if (width !== undefined) args.push(String(width));
+      if (profile) args.push("--profile", profile);
+      if (width !== undefined) args.push("--width", String(width));
       return run(args);
     }
   );

@@ -163,6 +163,39 @@ assert "bad profile shows error" "Unknown profile" "$OUT"
 OUT=$(run convert video.mp4 --help)
 assert "convert --help shows profiles" "Profiles:" "$OUT"
 
+# ── GIF profiles ──────────────────────────────────────────────────────────
+
+echo ""
+echo "🔧 GIF profiles"
+
+source commands/gif.sh
+
+apply_gif_profile default
+assert "gif default width" "480" "$GIF_WIDTH"
+assert "gif default fps" "15" "$GIF_FPS"
+assert "gif default colors" "256" "$GIF_COLORS"
+assert "gif default suffix" "" "$GIF_SUFFIX"
+
+apply_gif_profile slack
+assert "gif slack width" "360" "$GIF_WIDTH"
+assert "gif slack fps" "10" "$GIF_FPS"
+assert "gif slack colors" "128" "$GIF_COLORS"
+assert "gif slack suffix" "_slack" "$GIF_SUFFIX"
+
+apply_gif_profile readme
+assert "gif readme width" "720" "$GIF_WIDTH"
+assert "gif readme fps" "15" "$GIF_FPS"
+
+apply_gif_profile hq
+assert "gif hq width" "800" "$GIF_WIDTH"
+assert "gif hq fps" "24" "$GIF_FPS"
+
+OUT=$(apply_gif_profile badprofile 2>&1)
+assert "gif bad profile shows error" "Unknown profile" "$OUT"
+
+OUT=$(run gif video.mp4 00:00:00 00:00:05 --help)
+assert "gif --help shows profiles" "Profiles:" "$OUT"
+
 # ── Paths with spaces ──────────────────────────────────────────────────────
 
 echo ""

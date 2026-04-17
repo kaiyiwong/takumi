@@ -60,7 +60,7 @@ show_help() {
   echo "  trim <video> <start> <end>         Cut a clip between timestamps"
   echo "  thumb <path> [timestamp]            Extract poster image (JPG)"
   echo "  info <path>                         Show video metadata"
-  echo "  gif <video> <start> <end> [width]  Create animated GIF from clip"
+  echo "  gif <video> <start> <end> [opts]    Create animated GIF from clip"
   echo "  strip <path> <audio|video|both>    Extract audio/video tracks"
   echo "  srt2vtt <path>                     Convert SRT subtitles to VTT"
   echo "  vtt2srt <path>                     Convert VTT subtitles to SRT"

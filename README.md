@@ -5,7 +5,7 @@
 <h1 align="center">takumi (匠)</h1>
 
 <p align="center">
-  A toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos<br>from the command line or through AI assistants like Claude Code and Kiro.
+  A command-line toolkit for processing video assets. Convert, trim, caption, thumbnail, and inspect videos<br>with simple commands or through AI assistants via MCP.
 </p>
 
 <p align="center">
@@ -67,7 +67,7 @@ takumi setup
 | `takumi cc <path> [lang] [model] [format]` | Generate captions using Whisper |
 | `takumi thumb <path> [timestamp]` | Extract a poster image (JPG) |
 | `takumi info <path>` | Show video metadata |
-| `takumi gif <video> <start> <end> [width]` | Create animated GIF from a clip |
+| `takumi gif <video> <start> <end> [--profile name]` | Create animated GIF from a clip |
 | `takumi strip <path> <audio\|video\|both>` | Extract audio/video as separate tracks |
 | `takumi srt2vtt <path>` | Convert SRT subtitles to VTT |
 | `takumi vtt2srt <path>` | Convert VTT subtitles to SRT |
@@ -103,6 +103,12 @@ takumi thumb video.mp4 00:00:15
 
 # Create a GIF from a 5-second clip
 takumi gif video.mp4 00:00:05 00:00:10
+
+# GIF optimized for Slack
+takumi gif video.mp4 00:00:05 00:00:10 --profile slack
+
+# High quality GIF for portfolio
+takumi gif video.mp4 00:00:00 00:00:03 --profile hq
 
 # Extract audio only
 takumi strip video.mp4 audio
