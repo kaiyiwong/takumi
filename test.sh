@@ -196,6 +196,35 @@ assert "gif bad profile shows error" "Unknown profile" "$OUT"
 OUT=$(run gif video.mp4 00:00:00 00:00:05 --help)
 assert "gif --help shows profiles" "Profiles:" "$OUT"
 
+# ── Thumb profiles ─────────────────────────────────────────────────────────
+
+echo ""
+echo "🔧 Thumb profiles"
+
+source commands/thumb.sh
+
+apply_thumb_profile default
+assert "thumb default no scale" "" "$THUMB_SCALE"
+assert "thumb default suffix" "_poster" "$THUMB_SUFFIX"
+
+apply_thumb_profile youtube
+assert "thumb youtube scale" "1280:720" "$THUMB_SCALE"
+assert "thumb youtube suffix" "_yt" "$THUMB_SUFFIX"
+
+apply_thumb_profile og
+assert "thumb og scale" "1200:630" "$THUMB_SCALE"
+assert "thumb og suffix" "_og" "$THUMB_SUFFIX"
+
+apply_thumb_profile square
+assert "thumb square scale" "1080:1080" "$THUMB_SCALE"
+assert "thumb square suffix" "_sq" "$THUMB_SUFFIX"
+
+OUT=$(apply_thumb_profile badprofile 2>&1)
+assert "thumb bad profile shows error" "Unknown profile" "$OUT"
+
+OUT=$(run thumb video.mp4 --help)
+assert "thumb --help shows profiles" "Profiles:" "$OUT"
+
 # ── Paths with spaces ──────────────────────────────────────────────────────
 
 echo ""

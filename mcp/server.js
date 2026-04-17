@@ -91,40 +91,18 @@ async function main() {
   );
 
   server.tool(
-    "takumi_trim",
-    "Cut a clip between two timestamps",
-    {
-      path: z.string().describe("Path to video file"),
-      start: z.string().describe("Start timestamp (HH:MM:SS or HH:MM:SS.mmm)"),
-      end: z.string().describe("End timestamp (HH:MM:SS or HH:MM:SS.mmm)"),
-    },
-    async ({ path: p, start, end }) => {
-      return run(["trim", p, start, end]);
-    }
-  );
-
-  server.tool(
     "takumi_thumb",
-    "Extract a poster image (JPG) from a video",
+    "Extract a poster image (JPG) from a video. Choose a profile based on the user's intent:\n- 'default' (default): original aspect ratio, no crop, general poster frame\n- 'youtube': YouTube thumbnail, 1280x720, video cover image, YouTube upload\n- 'og': Open Graph, social share, Twitter card, Facebook preview, link preview, 1200x630\n- 'square': Instagram, App Store, album art, avatar, profile image, 1080x1080",
     {
       path: z.string().describe("Path to video file or folder"),
       timestamp: z.string().optional().describe("Timestamp to capture (default 00:00:01)"),
+      profile: z.enum(["default", "youtube", "og", "square"]).optional().describe("Thumbnail profile. 'default': original aspect ratio. 'youtube': 1280x720 YouTube spec. 'og': 1200x630 social share. 'square': 1080x1080 Instagram/App Store. Default: default"),
     },
-    async ({ path: p, timestamp }) => {
+    async ({ path: p, timestamp, profile }) => {
       const args = ["thumb", p];
       if (timestamp) args.push(timestamp);
+      if (profile) args.push("--profile", profile);
       return run(args);
-    }
-  );
-
-  server.tool(
-    "takumi_info",
-    "Show video metadata (resolution, codec, duration, etc.)",
-    {
-      path: z.string().describe("Path to video file or folder"),
-    },
-    async ({ path: p }) => {
-      return run(["info", p]);
     }
   );
 
@@ -143,40 +121,6 @@ async function main() {
       if (profile) args.push("--profile", profile);
       if (width !== undefined) args.push("--width", String(width));
       return run(args);
-    }
-  );
-
-  server.tool(
-    "takumi_strip",
-    "Extract audio and/or video as separate tracks",
-    {
-      path: z.string().describe("Path to video file or folder"),
-      mode: z.enum(["audio", "video", "both"]).describe("What to extract: audio, video, or both"),
-    },
-    async ({ path: p, mode }) => {
-      return run(["strip", p, mode]);
-    }
-  );
-
-  server.tool(
-    "takumi_srt2vtt",
-    "Convert SRT subtitle files to VTT format",
-    {
-      path: z.string().describe("Path to SRT file or folder"),
-    },
-    async ({ path: p }) => {
-      return run(["srt2vtt", p]);
-    }
-  );
-
-  server.tool(
-    "takumi_vtt2srt",
-    "Convert VTT subtitle files to SRT format",
-    {
-      path: z.string().describe("Path to VTT file or folder"),
-    },
-    async ({ path: p }) => {
-      return run(["vtt2srt", p]);
     }
   );
 

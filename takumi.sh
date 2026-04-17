@@ -58,7 +58,7 @@ show_help() {
   echo "  cc <path> [lang] [model] [format]  Generate captions from video"
   echo "  convert <path> [--profile <name>]   Convert to optimized MP4"
   echo "  trim <video> <start> <end>         Cut a clip between timestamps"
-  echo "  thumb <path> [timestamp]            Extract poster image (JPG)"
+  echo "  thumb <path> [timestamp] [opts]      Extract poster image (JPG)"
   echo "  info <path>                         Show video metadata"
   echo "  gif <video> <start> <end> [opts]    Create animated GIF from clip"
   echo "  strip <path> <audio|video|both>    Extract audio/video tracks"

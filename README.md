@@ -65,7 +65,7 @@ takumi setup
 | `takumi convert <path> [--profile name]` | Convert to optimized MP4 |
 | `takumi trim <video> <start> <end>` | Cut a clip between timestamps |
 | `takumi cc <path> [lang] [model] [format]` | Generate captions using Whisper |
-| `takumi thumb <path> [timestamp]` | Extract a poster image (JPG) |
+| `takumi thumb <path> [timestamp] [--profile name]` | Extract a poster image (JPG) |
 | `takumi info <path>` | Show video metadata |
 | `takumi gif <video> <start> <end> [--profile name]` | Create animated GIF from a clip |
 | `takumi strip <path> <audio\|video\|both>` | Extract audio/video as separate tracks |
@@ -101,6 +101,12 @@ takumi cc ./videos ja large
 # Thumbnail at a specific frame
 takumi thumb video.mp4 00:00:15
 
+# YouTube thumbnail
+takumi thumb video.mp4 00:00:15 --profile youtube
+
+# Social share / og:image
+takumi thumb video.mp4 --profile og
+
 # Create a GIF from a 5-second clip
 takumi gif video.mp4 00:00:05 00:00:10
 
@@ -119,7 +125,7 @@ takumi info ./videos
 
 ## AI Integration (MCP)
 
-takumi includes an MCP server so AI clients like Claude Code and Kiro can use all commands as tools. No syntax to remember, just describe what you want.
+takumi includes an MCP server so AI assistants can use its preset-driven commands as tools. No syntax to remember, just describe what you want.
 
 Run `takumi mcp-config` to get the config block for your client, or copy from below.
 
@@ -170,11 +176,10 @@ Create or edit `.kiro/settings/mcp.json` in your project:
 Once configured, just ask in natural language:
 
 - "convert all the videos in ~/projects/campaign for FireTV"
-- "what's the resolution and duration of this video?"
+- "compress this video for Slack"
 - "generate Japanese captions for the videos in this folder"
-- "trim the intro, keep only 00:01:30 to 00:04:00"
-- "extract the audio from meeting.mp4"
 - "make a gif from the first 5 seconds of demo.mp4"
+- "grab a YouTube thumbnail from this video at the 15 second mark"
 
 ## Update
 
